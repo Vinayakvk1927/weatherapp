@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Document</title>
+</head>
+
+<body class="bg-dark">
+    <div class="container">
+        <div class="col-md-5 m-auto border rounded p-3 mt-2 bg-primary h-75 bg-dark text-white">
+            <div class="display-6 mb-3 fw-bold text-center">Weather Analyzer</div>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Search by city" aria-label="Example text with button addon" aria-describedby="button-addon1" id="in1">
+                <button class="btn btn-secondary" type="button" id="button-addon1" onclick="weather()"> <i class="fa fa-search"></i> </button>
+            </div>
+            <div class="weather text-center text-white">
+                <img src="images/clear.png" alt="" id="Weathericon">
+                <h1 class="temp mx-5"> </h1>
+                <h2 class="city mx-5"></h2>
+            </div>
+            <div class="details d-flex flex-row mt-5">
+                <div class="col text-center text-white mt-2">
+                    <img src="images/humidity.png" alt="">
+                    <div>
+                        <p class="humidity lead fw-bold"></p>
+                        <p class="lead fw-bold">Humidity</p>
+                    </div>
+                </div>
+                <div class="col text-center text-white">
+                    <img src="images/wind.png" alt="">
+                    <div>
+                        <p class="wind lead fw-bold"></p>
+                        <p class="lead fw-bold">Wind speed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- script -->
+    <script>
+        function weather() {
+            let a = document.getElementById("in1").value
+            var icon = document.getElementById("Weathericon")
+            const apiKey = "5cac27c65448f48d6d29ce5a0a14e1bb";
+            const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+            async function checkweather() {
+                const response = await fetch(apiUrl + a + `&appid=${apiKey}`);
+                if (response.status == 404) {
+                    alert("enter a valid city")
+                } else {
+                    let data = await response.json();
+                    console.log(data)
+
+                    document.querySelector(".city").innerHTML = data.name;
+                    document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + `&#xb0; c`;
+                    document.querySelector(".humidity").innerHTML = data.main.humidity + `%`;
+                    document.querySelector(".wind").innerHTML = data.wind.speed + `km/hr`;
+
+                    if (data.weather[0].main == "Clouds") {
+                        icon.src = "images/clouds.png"
+                    } else if (data.weather[0].main == "Clear") {
+                        icon.src = "images/clear.png"
+                    } else if (data.weather[0].main == "Rain") {
+                        icon.src = "images/rain.png"
+                    } else if (data.weather[0].main == "Drizzle") {
+                        icon.src = "images/drizzle.png"
+                    } else if (data.weather[0].main == "Mist") {
+                        icon.src = "images/mist.png"
+                    } else if (data.weather[0].main == "Snow") {
+                        icon.src = "images/snow.png"
+                    }
+                }
+
+            }
+            checkweather();
+            a = "";
+        }
+    </script>
+
+</body>
+
+</html>
